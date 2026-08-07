@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Login • Smart Crop Recommendation{% endblock %}
+{% block content %}
+<main class="auth">
+  <section class="auth-container">
+    <article class="auth-card">
+      <h1 class="auth-title">Login</h1>
+      <p class="auth-sub">Welcome back! Please sign in to continue.</p>
+      <form class="auth-form" method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="form-row">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="email" class="input" placeholder="Enter your email" required />
+        </div>
+        <div class="form-row">
+          <label for="password">Password</label>
+          <div class="password-wrapper">
+            <input id="password" name="password" type="password" class="input" placeholder="Enter your password" required minlength="8" />
+            <button type="button" id="toggleLoginPassword" class="toggle-password" aria-label="Show password">
+              <svg class="eye-on" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="userType">Type</label>
+          <select id="userType" name="usertype" class="select" required>
+            <option value="" disabled selected>Select type</option>
+            <option value="Farmer">Farmer</option>
+            <option value="Researcher">Researcher</option>
+          </select>
+        </div>
+        <div class="form-row" style="display:flex; gap:10px;">
+          <button type="submit" class="btn-primary" style="flex:1;">Login</button>
+        </div>
+        <p class="auth-meta"><a href="{% url 'forgot_password' %}" class="link">Forgot password?</a></p>
+      </form>
+      <p class="auth-meta">Don't have an account? <a href="{% url 'register' %}" class="link">Register</a></p>
+    </article>
+  </section>
+</main>
+ 
+{% endblock %}

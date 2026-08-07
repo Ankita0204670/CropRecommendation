@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Results • Smart Crop Recommendation{% endblock %}
+{% block content %}
+<section class="auth">
+  <div class="auth-container">
+    <article class="auth-card">
+      <h1 class="auth-title">Prediction Results</h1>
+      <p class="auth-sub">Your crop recommendation</p>
+      <div class="results-content" style="text-align:center;">
+        <span id="cropName" style="color:#28a745;font-size:1.5em">{{ prediction|default:"—" }}</span>
+        {% if warnings %}
+        <div id="warningsBox" style="background:#fff3cd;border:1px solid #ffc107;padding:15px;border-radius:5px;margin-top:15px;">
+          <h3>Warnings & Suggestions:</h3>
+          <ul id="warningList" style="text-align:left;padding-left:20px;">
+            {% for w in warnings %}
+              <li>{{ w }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        <a href="{% url 'predict' %}" class="btn-primary" style="margin-top:20px;display:inline-block;">Try Again</a>
+      </div>
+    </article>
+  </div>
+</section>
+{% endblock %}

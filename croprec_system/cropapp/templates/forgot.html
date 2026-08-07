@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Reset Password • Smart Crop Recommendation{% endblock %}
+{% block content %}
+<main class="auth">
+  <section class="auth-container">
+    <article class="auth-card">
+      <h1 class="auth-title">Reset Password</h1>
+      <p class="auth-sub">Enter your email and a new password.</p>
+      <form class="auth-form"   method="POST" action="{% url 'forgot_password' %}">
+        {% csrf_token %}
+        <div class="form-row">
+          <label for="forgotEmail">Email</label>
+          <input id="forgotEmail" name="email" type="email" class="input" placeholder="Enter your email" required />
+        </div>
+        <div class="form-row">
+          <label for="newPassword">New Password</label>
+          <input id="newPassword" name="new_password" type="password" class="input" placeholder="Enter new password" required minlength="8" />
+        </div>
+        <div class="form-row">
+          <label for="confirmPassword">Confirm Password</label>
+          <input id="confirmPassword" name="confirm_password" type="password" class="input" placeholder="Confirm new password" required minlength="8" />
+        </div>
+        <button type="submit" class="btn-primary full">Update Password</button>
+      </form>
+      <p class="auth-meta"><a href="{% url 'login' %}" class="link">Back to login</a></p>
+    </article>
+  </section>
+ </main>
+{% endblock %}

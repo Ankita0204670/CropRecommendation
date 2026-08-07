@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    .feedback-container {
+        max-width: 650px;
+        margin: 50px auto;
+        padding: 25px;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .feedback-title {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+        color: #2f9e44; /* Green theme */
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #2f9e44;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-control, select {
+        border-radius: 10px !important;
+        padding: 12px;
+        width: 100%; /* Ensure full width in column layout */
+        box-sizing: border-box;
+    }
+
+    .btn-submit {
+        width: 100%;
+        background: #2f9e44;
+        color: #fff;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        transition: 0.3s ease;
+    }
+
+    .btn-submit:hover {
+        background: #38b24a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* Star rating style */
+    .rating-stars { display: inline-flex; flex-direction: row-reverse; gap: 6px; }
+    .rating-stars input {
+        display: none;
+    }
+
+    .rating-stars label {
+        font-size: 32px;
+        color: #ccc;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .rating-stars input:checked ~ label,
+    .rating-stars label:hover,
+    .rating-stars label:hover ~ label {
+        color: #f7d106;
+    }
+</style>
+
+<div class="feedback-container">
+    <h2 class="feedback-title">🌟 We Value Your Feedback</h2>
+
+    <form id="feedbackForm" method="POST" action="{% url 'feedback' %}" novalidate>
+        {% csrf_token %}
+        
+        <!-- Subject -->
+        <div class="form-group">
+            <label class="form-label">Subject:</label>
+            {{ form.subject }}
+        </div>
+
+        <!-- Message -->
+        <div class="form-group">
+            <label class="form-label">Message:</label>
+            {{ form.message }}
+        </div>
+
+        <!-- Rating stars -->
+        <div class="rating-row">
+    <label class="form-label">Rating:</label>
+
+    <div class="rating-stars">
+        {% for value in "54321" %}
+            <input
+                type="radio"
+                id="star{{ value }}"
+                name="rating"
+                value="{{ value }}"
+                required
+            >
+            <label for="star{{ value }}">★</label>
+        {% endfor %}
+    </div>
+</div>
+        <button type="submit" class="btn-submit">Submit Feedback</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+        var subject = this.querySelector('[name="subject"]').value;
+        var message = this.querySelector('[name="message"]').value;
+        var rating = this.querySelector('input[name="rating"]:checked');
+        
+        if (!subject.trim() || !message.trim() || !rating) {
+            event.preventDefault();
+            
+            const alertModal = document.getElementById('alertModal');
+            const alertContent = document.getElementById('alertContent');
+            const alertHeader = alertModal.querySelector('.modal-header');
+
+            if (alertModal && alertContent) {
+                if (alertHeader) alertHeader.style.display = 'none';
+                alertContent.innerHTML = '<div class="modal-message flash-error" style="text-align: center;">Please fill all fields</div>';
+                alertModal.classList.remove('hidden');
+            } else {
+                alert("Please fill all fields");
+            }
+        }
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Smart Crop Recommendation{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+  <script defer src="{% static 'script.js' %}"></script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo"><a href="{% url 'home' %}">Smart Crop Recommendation</a></div>
+      <button id="navToggle" class="nav-toggle" aria-label="Toggle"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
+      <nav id="navMenu" class="nav-menu">
+        <a href="{% url 'home' %}" class="nav-link">Home</a>
+        <a href="{% url 'home' %}#features" class="nav-link">About</a>
+        {% if request.user.is_authenticated %}
+          {% if request.session.usertype == 'Researcher' %}
+            <a href="{% url 'researcher' %}" class="nav-link">Dashboard</a>
+          {% endif %}
+          {% if request.session.usertype != 'Researcher' %}
+            <a href="{% url 'predict' %}" class="nav-link">Predict Crop</a>
+            <a href="{% url 'result' %}" class="nav-link">Results</a>
+          {% endif %}
+          <a href="{% url 'feedback' %}" class="nav-link">Feedback</a>
+          <div class="nav-user">
+            <button id="avatarBtn" class="avatar-btn" aria-label="Account">
+              {% if request.user.first_name %}
+                {{ request.user.first_name|first|upper }}
+              {% else %}
+                {{ request.session.username|first|upper }}
+              {% endif %}
+            </button>
+            <div id="avatarDropdown" class="avatar-dropdown">
+              <span class="user-name">{{ request.session.username }}</span>
+              <span class="user-type">{{ request.session.usertype }}</span>
+              <a id="logoutBtn" href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+            </div>
+          </div>
+        {% else %}
+             <a href="{% url 'login' %}" class="nav-link">Login</a>
+             <a href="{% url 'admin:index' %}" class="nav-link">Admin Login</a>             
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+  {% if messages %}
+<div id="messageModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-content">
+            {% for message in messages %}
+                <div class="modal-message {% if message.tags %}flash-{{ message.tags }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        <div class="modal-actions">
+            <button id="messageOkBtn" class="btn-primary">OK</button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+  <div id="alertModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">Validation</div>
+      <div class="modal-content" id="alertContent"></div>
+      <div class="modal-actions">
+        <button id="alertOkBtn" class="btn-primary">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="contact">
+        <h4>Contact</h4>
+        <p>Email: contact@smartcrop.example</p>
+      </div>
+    </div>
+    <p class="copy">© <span id="year"></span> Smart Crop Recommendation</p>
+  </footer>
+</body>
+</html>

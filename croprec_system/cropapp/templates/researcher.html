@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Researcher Dashboard • Smart Crop Recommendation{% endblock %}
+{% block content %}
+<section class="auth">
+  <div class="auth-container researcher-container">
+    <article class="auth-card researcher-card">
+      <h1 class="auth-title">Researcher Dashboard</h1>
+      <form class="filter-form" method="get">
+        <input type="text" name="crop" class="input" placeholder="Filter by crop" value="{{ request.GET.crop }}">
+        <button type="submit" class="btn-primary">Filter</button>
+      </form>
+      <div class="result-meta">
+        <h3 class="auth-sub">Average Values:</h3>
+        <p>N: {{ avg_N|default:"-" }} | P: {{ avg_P|default:"-" }} | K: {{ avg_K|default:"-" }}</p>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Farmer</th>
+              <th>Crop</th>
+              <th>N</th>
+              <th>P</th>
+              <th>K</th>
+              <th>Temperature</th>
+              <th>Humidity</th>
+              <th>pH</th>
+              <th>Rainfall</th>
+              <th>Recommended On</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for record in records %}
+            <tr>
+              <td>{{ record.farmer.username }}</td>
+              <td>{{ record.predicted_crop }}</td>
+              <td>{{ record.N }}</td>
+              <td>{{ record.P }}</td>
+              <td>{{ record.K }}</td>
+              <td>{{ record.temperature }}</td>
+              <td>{{ record.humidity }}</td>
+              <td>{{ record.ph }}</td>
+              <td>{{ record.rainfall }}</td>
+              <td>{{ record.recommended_on }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="10">No records found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </div>
+</section>
+{% endblock %}
